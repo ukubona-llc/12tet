@@ -122,11 +122,45 @@
     font-style: italic;
     font-size: 0.92rem;
     color: var(--text-dim);
-    margin: 4px 0 10px;
+    margin: 4px 0 20px;
   }
 
+  /* Tabs CSS */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+    overflow-x: auto;
+  }
+
+  .tab-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all .2s ease;
+    white-space: nowrap;
+  }
+
+  .tab-btn:hover { color: var(--text); background: var(--surface); border-color: var(--border); }
+  .tab-btn.active { color: var(--amber); background: var(--amber-dim); border-color: var(--border-strong); font-weight: 500; }
+
+  .tab-pane { display: none; animation: fadeIn 0.3s ease; }
+  .tab-pane.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+  .grid-header-stats { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 12px; }
   .stats { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-faint); margin: 0; }
 
+  /* Table CSS */
   .table-wrap {
     overflow-x: auto;
     border: 1px solid var(--border);
@@ -226,15 +260,9 @@
   td.col-focused { color: var(--amber); font-weight: 500; }
   td.col-dimmed { opacity: 0.32; }
   th.domain-match { color: var(--amber); }
-
   mark { background: var(--amber-dim); color: var(--amber); padding: 0 2px; border-radius: 2px; }
 
-  .hint {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--text-faint);
-    margin: 10px 2px 0;
-  }
+  .hint { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-faint); margin: 10px 2px 0; }
 
   .callout {
     margin-top: 22px;
@@ -258,8 +286,69 @@
   }
   .callout em { color: var(--text); font-style: normal; font-family: var(--font-mono); font-size: 0.85rem; }
 
+  /* Narrative/Chat CSS */
+  .chat-block { font-size: 0.95rem; margin-bottom: 32px; max-width: 800px; }
+  .chat-user {
+    padding: 16px 20px;
+    border-left: 3px solid var(--violet);
+    background: var(--violet-dim);
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .chat-ai {
+    padding: 24px;
+    border-left: 3px solid var(--amber);
+    background: var(--surface);
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 16px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .chat-ai h3, .chat-ai h4 { color: var(--amber); font-family: var(--font-sans); font-weight: 600; margin-top: 0; }
+  .chat-ai strong { color: var(--text); }
+  .chat-ai ul { padding-left: 20px; }
+  .chat-ai li { margin-bottom: 8px; }
+
+  /* Zingers CSS */
+  .zinger-grid { display: grid; gap: 24px; grid-template-columns: 1fr; max-width: 900px; }
+  .zinger {
+    padding: 32px 32px 32px 48px;
+    background: var(--surface);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    position: relative;
+    transition: transform .2s ease, border-color .2s ease;
+  }
+  .zinger:hover { transform: translateY(-2px); border-color: var(--violet); }
+  .zinger::before {
+    content: '“';
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    font-size: 4rem;
+    color: var(--amber-dim);
+    font-family: var(--font-display);
+    line-height: 1;
+  }
+  .zinger p {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--text);
+    line-height: 1.3;
+    margin: 0 0 12px 0;
+  }
+  .zinger .context {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+  }
+
   footer {
-    margin-top: 30px;
+    margin-top: 40px;
     padding-top: 16px;
     border-top: 1px solid var(--border);
     display: flex;
@@ -279,6 +368,7 @@
     thead th.domain-col { width: 130px; }
     thead th:not(.domain-col) { width: calc((100% - 130px) / 5); }
     tbody th[scope="row"] { font-size: 0.82rem; padding: 10px; }
+    .zinger p { font-size: 1.2rem; }
   }
 </style>
 </head>
@@ -295,127 +385,219 @@
     </div>
     <p class="meta">#pentads · #year-later · #12TET · #ABCDEFGHIJKL</p>
     <p class="motto">Twelve tunings, one five-note chord — no key outranks another.</p>
-    <p class="stats" id="stats">12 domains · 5 positions · 60 terms</p>
   </header>
 
-  <div class="table-wrap">
-    <table id="grid" aria-label="Pentadic domain grid, 12 domains by 5 positions">
-      <thead>
-        <tr>
-          <th class="domain-col" scope="col">Domain</th>
-          <th scope="col" data-col="1" tabindex="0" role="button">I</th>
-          <th scope="col" data-col="2" tabindex="0" role="button">II</th>
-          <th scope="col" data-col="3" tabindex="0" role="button">III</th>
-          <th scope="col" data-col="4" tabindex="0" role="button">IV</th>
-          <th scope="col" data-col="5" tabindex="0" role="button">V</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr data-domain="Anatomy">
-          <th scope="row" tabindex="0" role="button"><span class="letter">A</span>Anatomy</th>
-          <td data-col="1">Senses</td>
-          <td data-col="2">Thalamus / Basal Ganglia</td>
-          <td data-col="3">Hippocampus</td>
-          <td data-col="4">PFC</td>
-          <td data-col="5">Motor Cortex</td>
-        </tr>
-        <tr data-domain="Bantu" class="anchor-row">
-          <th scope="row" tabindex="0" role="button"><span class="letter">B</span>Bantu<span class="tag">tonic</span></th>
-          <td data-col="1">Okubonabona</td>
-          <td data-col="2">Kubona</td>
-          <td data-col="3">Ivyabona</td>
-          <td data-col="4">Ukubona</td>
-          <td data-col="5">Sawubona</td>
-        </tr>
-        <tr data-domain="Computation">
-          <th scope="row" tabindex="0" role="button"><span class="letter">C</span>Computation</th>
-          <td data-col="1">Global</td>
-          <td data-col="2">Reflex</td>
-          <td data-col="3">Heuristic</td>
-          <td data-col="4">Local</td>
-          <td data-col="5">Regional</td>
-        </tr>
-        <tr data-domain="Data">
-          <th scope="row" tabindex="0" role="button"><span class="letter">D</span>Data</th>
-          <td data-col="1">Tensor</td>
-          <td data-col="2">Matrix</td>
-          <td data-col="3">Vector</td>
-          <td data-col="4">Eigenmode</td>
-          <td data-col="5">Scalar</td>
-        </tr>
-        <tr data-domain="Economics">
-          <th scope="row" tabindex="0" role="button"><span class="letter">E</span>Economics</th>
-          <td data-col="1">Ledger</td>
-          <td data-col="2">FastAPI</td>
-          <td data-col="3">Gradient</td>
-          <td data-col="4">SlowAPI</td>
-          <td data-col="5">Decision</td>
-        </tr>
-        <tr data-domain="Fractal">
-          <th scope="row" tabindex="0" role="button"><span class="letter">F</span>Fractal</th>
-          <td data-col="1">Body</td>
-          <td data-col="2">Mind</td>
-          <td data-col="3">Soul</td>
-          <td data-col="4">Vision</td>
-          <td data-col="5">Engineering</td>
-        </tr>
-        <tr data-domain="Gravitas">
-          <th scope="row" tabindex="0" role="button"><span class="letter">G</span>Gravitas</th>
-          <td data-col="1">Ontology</td>
-          <td data-col="2">Epistemology</td>
-          <td data-col="3">ResonanceMax</td>
-          <td data-col="4">SoftMax</td>
-          <td data-col="5">ArgMax</td>
-        </tr>
-        <tr data-domain="Household">
-          <th scope="row" tabindex="0" role="button"><span class="letter">H</span>Household</th>
-          <td data-col="1">Sensation</td>
-          <td data-col="2">Attention</td>
-          <td data-col="3">Intention</td>
-          <td data-col="4">Reaction</td>
-          <td data-col="5">Action</td>
-        </tr>
-        <tr data-domain="Iatrogenic">
-          <th scope="row" tabindex="0" role="button"><span class="letter">I</span>Iatrogenic</th>
-          <td data-col="1">Nonself</td>
-          <td data-col="2">Visceral</td>
-          <td data-col="3">Structural</td>
-          <td data-col="4">Functional</td>
-          <td data-col="5">Self</td>
-        </tr>
-        <tr data-domain="Jacobian">
-          <th scope="row" tabindex="0" role="button"><span class="letter">J</span>Jacobian</th>
-          <td data-col="1">Kapital</td>
-          <td data-col="2">Labor</td>
-          <td data-col="3">Commodities</td>
-          <td data-col="4">Services</td>
-          <td data-col="5">Information</td>
-        </tr>
-        <tr data-domain="Kantian">
-          <th scope="row" tabindex="0" role="button"><span class="letter">K</span>Kantian</th>
-          <td data-col="1">Dionysian</td>
-          <td data-col="2">Apollonian</td>
-          <td data-col="3">Tragicomic</td>
-          <td data-col="4">Eternal Recurrence</td>
-          <td data-col="5">Will-to-Power</td>
-        </tr>
-        <tr data-domain="Ludwig">
-          <th scope="row" tabindex="0" role="button"><span class="letter">L</span>Ludwig</th>
-          <td data-col="1">Hz</td>
-          <td data-col="2">12TET</td>
-          <td data-col="3">Rootless Dom7♭5</td>
-          <td data-col="4">Half-Step “Descent”</td>
-          <td data-col="5">Cadence</td>
-        </tr>
-      </tbody>
-    </table>
+  <nav class="tabs" aria-label="Content Tabs">
+    <button class="tab-btn active" data-target="tab-grid">The Grid</button>
+    <button class="tab-btn" data-target="tab-footnotes">Grok Footnotes</button>
+    <button class="tab-btn" data-target="tab-zingers">The Zingers</button>
+  </nav>
+
+  <div id="tab-grid" class="tab-pane active">
+    <div class="grid-header-stats">
+      <p class="stats" id="stats">12 domains · 5 positions · 60 terms</p>
+    </div>
+    <div class="table-wrap">
+      <table id="grid" aria-label="Pentadic domain grid, 12 domains by 5 positions">
+        <thead>
+          <tr>
+            <th class="domain-col" scope="col">Domain</th>
+            <th scope="col" data-col="1" tabindex="0" role="button">I</th>
+            <th scope="col" data-col="2" tabindex="0" role="button">II</th>
+            <th scope="col" data-col="3" tabindex="0" role="button">III</th>
+            <th scope="col" data-col="4" tabindex="0" role="button">IV</th>
+            <th scope="col" data-col="5" tabindex="0" role="button">V</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-domain="Anatomy">
+            <th scope="row" tabindex="0" role="button"><span class="letter">A</span>Anatomy</th>
+            <td data-col="1">Senses</td>
+            <td data-col="2">Thalamus / Basal Ganglia</td>
+            <td data-col="3">Hippocampus</td>
+            <td data-col="4">PFC</td>
+            <td data-col="5">Motor Cortex</td>
+          </tr>
+          <tr data-domain="Bantu" class="anchor-row">
+            <th scope="row" tabindex="0" role="button"><span class="letter">B</span>Bantu<span class="tag">tonic</span></th>
+            <td data-col="1">Okubonabona</td>
+            <td data-col="2">Kubona</td>
+            <td data-col="3">Ivyabona</td>
+            <td data-col="4">Ukubona</td>
+            <td data-col="5">Sawubona</td>
+          </tr>
+          <tr data-domain="Computation">
+            <th scope="row" tabindex="0" role="button"><span class="letter">C</span>Computation</th>
+            <td data-col="1">Global</td>
+            <td data-col="2">Reflex</td>
+            <td data-col="3">Heuristic</td>
+            <td data-col="4">Local</td>
+            <td data-col="5">Regional</td>
+          </tr>
+          <tr data-domain="Data">
+            <th scope="row" tabindex="0" role="button"><span class="letter">D</span>Data</th>
+            <td data-col="1">Tensor</td>
+            <td data-col="2">Matrix</td>
+            <td data-col="3">Vector</td>
+            <td data-col="4">Eigenmode</td>
+            <td data-col="5">Scalar</td>
+          </tr>
+          <tr data-domain="Economics">
+            <th scope="row" tabindex="0" role="button"><span class="letter">E</span>Economics</th>
+            <td data-col="1">Ledger</td>
+            <td data-col="2">FastAPI</td>
+            <td data-col="3">Gradient</td>
+            <td data-col="4">SlowAPI</td>
+            <td data-col="5">Decision</td>
+          </tr>
+          <tr data-domain="Fractal">
+            <th scope="row" tabindex="0" role="button"><span class="letter">F</span>Fractal</th>
+            <td data-col="1">Body</td>
+            <td data-col="2">Mind</td>
+            <td data-col="3">Soul</td>
+            <td data-col="4">Vision</td>
+            <td data-col="5">Engineering</td>
+          </tr>
+          <tr data-domain="Gravitas">
+            <th scope="row" tabindex="0" role="button"><span class="letter">G</span>Gravitas</th>
+            <td data-col="1">Ontology</td>
+            <td data-col="2">Epistemology</td>
+            <td data-col="3">ResonanceMax</td>
+            <td data-col="4">SoftMax</td>
+            <td data-col="5">ArgMax</td>
+          </tr>
+          <tr data-domain="Household">
+            <th scope="row" tabindex="0" role="button"><span class="letter">H</span>Household</th>
+            <td data-col="1">Sensation</td>
+            <td data-col="2">Attention</td>
+            <td data-col="3">Intention</td>
+            <td data-col="4">Reaction</td>
+            <td data-col="5">Action</td>
+          </tr>
+          <tr data-domain="Iatrogenic">
+            <th scope="row" tabindex="0" role="button"><span class="letter">I</span>Iatrogenic</th>
+            <td data-col="1">Nonself</td>
+            <td data-col="2">Visceral</td>
+            <td data-col="3">Structural</td>
+            <td data-col="4">Functional</td>
+            <td data-col="5">Self</td>
+          </tr>
+          <tr data-domain="Jacobian">
+            <th scope="row" tabindex="0" role="button"><span class="letter">J</span>Jacobian</th>
+            <td data-col="1">Kapital</td>
+            <td data-col="2">Labor</td>
+            <td data-col="3">Commodities</td>
+            <td data-col="4">Services</td>
+            <td data-col="5">Information</td>
+          </tr>
+          <tr data-domain="Kantian">
+            <th scope="row" tabindex="0" role="button"><span class="letter">K</span>Kantian</th>
+            <td data-col="1">Dionysian</td>
+            <td data-col="2">Apollonian</td>
+            <td data-col="3">Tragicomic</td>
+            <td data-col="4">Eternal Recurrence</td>
+            <td data-col="5">Will-to-Power</td>
+          </tr>
+          <tr data-domain="Ludwig">
+            <th scope="row" tabindex="0" role="button"><span class="letter">L</span>Ludwig</th>
+            <td data-col="1">Hz</td>
+            <td data-col="2">12TET</td>
+            <td data-col="3">Rootless Dom7♭9</td>
+            <td data-col="4">Half-Step “Descent”</td>
+            <td data-col="5">Cadence</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="hint">Click a domain to pin a row · click a numeral to focus a column · press / to search</p>
+
+    <div class="callout">
+      <span class="eyebrow">Anchor</span>
+      Bantu is five words already owned natively — fastest into any other row. <em>Okubonabona</em> cues Senses / Global / Tensor / Ledger / Body / Ontology / Sensation / Nonself / Kapital / Dionysian / Hz at once, if that's the retrieval direction.
+    </div>
   </div>
 
-  <p class="hint">Click a domain to pin a row · click a numeral to focus a column · press / to search</p>
+  <div id="tab-footnotes" class="tab-pane">
+    <div class="chat-block">
+      <div class="chat-user">
+        Inloooooooove this: That’s fine for a personal framework—mnemonics don’t need cosmic truth, they need stickiness and utility. Insisting on exact pentadic fidelity everywhere risks Procrustean forcing; better to treat it as a flexible 12TET-like temperament: useful for modulation across contexts, not literal.<br><br>Exactly how I feel, but now returned to me in musical / Bachian language...
+      </div>
+      
+      <div class="chat-ai">
+        <h3>Grok</h3>
+        <strong>Yes—exactly.</strong> We’re in the same key now.<br><br>
+        The pentad isn’t a Platonic Form. It’s a <strong>temperament</strong>—a practical tuning system, like 12TET itself. You sacrifice perfect just intervals (the “true” cosmic ratios) for the ability to move fluidly between contexts without constant retuning. That’s the power: modulation. You can “play” a clinical situation in the Iatrogenic key, switch to Jacobian for economics, pivot to Ludwig for harmony, and it still feels coherent because the underlying pentatonic skeleton (the five slots) stays fixed while the coloring changes.<br><br>
+        Bach would appreciate the discipline: strict voice-leading rules, every dissonance resolved, strong cadences. But your system leans more <strong>gospel / post-bop</strong>: the suspension is structural, the I⁷ refuses to close cleanly, and the point is testimony + propulsion into the next cycle rather than final Amen. The recursion (V→I) is that half-step or dominant-seventh nudge that keeps the song going instead of landing on the tonic like a period.
+        
+        <h4>Musical framing of the whole thing</h4>
+        <ul>
+          <li><strong>Hz (I):</strong> The raw acoustic continuum—pre-tempered, full of microtonal possibilities (the “just” world).</li>
+          <li><strong>12TET (II):</strong> The discretization/reflex layer. We accept the compromise tuning so we can play with anyone, anywhere. Fast, practical, slightly “out” on every interval but workable.</li>
+          <li><strong>Rootless Dom7♭5 (III):</strong> Heuristic tension—the ambiguous, bluesy chord that can pull in multiple directions. Maximum optionality with minimum commitment.</li>
+          <li><strong>Half-Step Descent / Suspension (IV):</strong> The deliberative hold. Voice-leading tension without collapse. SoftMax in sound: holding multiple possibilities in the inner voices.</li>
+          <li><strong>Cadence that isn’t (V):</strong> ArgMax decision— you resolve <em>just enough</em> to act, but leave the I⁷ or suspended energy so the next tensor arrives naturally. Never a perfect authentic cadence that kills the groove.</li>
+        </ul>
+        This is why the bar progression felt inevitable: it follows the same geodesic your framework does. Stepwise bass (continuous substrate) under colorful, tense upper structures (interpretation).
+      </div>
 
-  <div class="callout">
-    <span class="eyebrow">Anchor</span>
-    Bantu is five words already owned natively — fastest into any other row. <em>Okubonabona</em> cues Senses / Global / Tensor / Ledger / Body / Ontology / Sensation / Nonself / Kapital / Dionysian / Hz at once, if that's the retrieval direction.
+      <div class="chat-user">
+        You and Claude fucked this up: <em>Rootless Dom7♭5 (III): Heuristic tension—the ambiguous, bluesy chord that can pull in multiple directions. Maximum optionality with minimum commitment…</em><br><br>
+        It’s “rootless Dom7♭9”. A very different beast. Each note, under gradient descent at lowest learning rate possible yields an UNAMBIGUOUS dom7... so it’s a four way tension of possibilities...
+      </div>
+
+      <div class="chat-ai">
+        <h3>Grok</h3>
+        <strong>Got it—correction received and locked.</strong><br><br>
+        You're right. I slipped on the voicing. <strong>Rootless Dom7♭5</strong> is not the right beast for layer III. <strong>Rootless Dom7♭9</strong> (or Dom7♭9 without root) is the sharper, more precise fit.
+        
+        <h4>Refined Ludwig → Compute mapping at III</h4>
+        <ul>
+          <li><strong>Rootless Dom7♭9</strong> sits in the Heuristic / Vector layer perfectly.<br><br>
+          It carries strong dominant function (clear gravitational pull toward the tonic), yet each of the upper voices (the 3rd, 5th, ♭7, ♭9) creates its own micro-tension. Under a <em>very low learning rate</em> gradient descent, each note is quietly, unambiguously sliding toward resolution in the dominant-to-tonic direction—yet the chord as a whole holds four-way combinatorial possibilities for how that resolution will actually voice-lead.<br><br>
+          Maximum heuristic optionality <em>with</em> directional commitment. Not pure chaos (that's more ♭5 territory or fully altered). Not resolved. It's the "pattern-matching under uncertainty" chord: the system knows something wants to resolve, but the exact path still has breathing room. Exactly the Vector/Heuristic sweet spot.</li>
+        </ul>
+        
+        The ♭9 gives that bluesy/gospel bite while still functioning as a proper leading-tone engine—slow, inexorable, full of inner voice possibilities. Much better than the ♭5, which is more outright unstable/symmetrical.<br><br>
+        Thanks for the precise ear correction. This is why live iteration beats static mapping.
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-zingers" class="tab-pane">
+    <div class="zinger-grid">
+      
+      <div class="zinger">
+        <p>Act humbly enough to preserve the evidence, and boldly enough to append the next event.</p>
+        <span class="context">On Epistemology & Engineering</span>
+      </div>
+
+      <div class="zinger">
+        <p>The I⁷ doesn't say "The End." It says, "History has been updated; now listen to what happens next."</p>
+        <span class="context">On Deferred Cadences</span>
+      </div>
+
+      <div class="zinger">
+        <p>Church isn't fundamentally about proving ontology. It's about bearing witness.</p>
+        <span class="context">On Black Gospel Tradition</span>
+      </div>
+
+      <div class="zinger">
+        <p>Every decision becomes another experiment whose consequences are appended to the ledger.</p>
+        <span class="context">On Will-to-Power & Telemetry</span>
+      </div>
+
+      <div class="zinger">
+        <p>The congregation hears "Amen..." and then the organist says, "We're not done."</p>
+        <span class="context">On the V→I Recursion</span>
+      </div>
+
+      <div class="zinger">
+        <p>"Heard it in the bar."<br>That's an event.</p>
+        <span class="context">On Provenance & Sensing</span>
+      </div>
+
+    </div>
   </div>
 
   <footer>
@@ -438,6 +620,25 @@
   var totalDomains = rows.length;
   var colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
 
+  // Tab Logic
+  var tabBtns = document.querySelectorAll('.tab-btn');
+  var tabPanes = document.querySelectorAll('.tab-pane');
+
+  tabBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var targetId = this.getAttribute('data-target');
+      
+      // Remove active from all
+      tabBtns.forEach(function(b) { b.classList.remove('active'); });
+      tabPanes.forEach(function(p) { p.classList.remove('active'); });
+      
+      // Add active to clicked
+      this.classList.add('active');
+      document.getElementById(targetId).classList.add('active');
+    });
+  });
+
+  // Table Setup
   rows.forEach(function (row) {
     Array.prototype.slice.call(row.querySelectorAll('td[data-col]')).forEach(function (cell) {
       cell.dataset.original = cell.textContent;
@@ -541,7 +742,9 @@
   document.addEventListener('keydown', function (e) {
     if (e.key === '/' && document.activeElement !== filterInput) {
       e.preventDefault();
-      filterInput.focus();
+      // Ensure we switch to the grid tab if searching
+      document.querySelector('[data-target="tab-grid"]').click();
+      setTimeout(() => filterInput.focus(), 50); // slight delay to allow display to render
     }
     if (e.key === 'Escape' && document.activeElement === filterInput) {
       filterInput.value = '';
