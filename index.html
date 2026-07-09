@@ -1,1 +1,555 @@
-.
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark light">
+<title>Pentads — Year Two</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+
+  :root {
+    --bg: #0a0910;
+    --surface: #14121c;
+    --surface-2: #1c1928;
+    --text: #eae6f3;
+    --text-dim: #9891a8;
+    --text-faint: #6b6478;
+    --amber: #e2a33f;
+    --amber-dim: rgba(226,163,63,0.14);
+    --violet: #a48ef0;
+    --violet-dim: rgba(164,142,240,0.14);
+    --border: rgba(164,142,240,0.16);
+    --border-strong: rgba(226,163,63,0.4);
+    --font-display: 'DM Serif Display', Georgia, serif;
+    --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  }
+
+  html[data-theme="light"] {
+    --bg: #f7f5f1;
+    --surface: #ffffff;
+    --surface-2: #efece5;
+    --text: #1c1926;
+    --text-dim: #5b5568;
+    --text-faint: #8b8496;
+    --amber: #a06a1a;
+    --amber-dim: rgba(160,106,26,0.10);
+    --violet: #6d54c9;
+    --violet-dim: rgba(109,84,201,0.09);
+    --border: rgba(109,84,201,0.16);
+    --border-strong: rgba(160,106,26,0.35);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    transition: background-color .25s ease, color .25s ease;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 48px 24px 56px; }
+
+  header { margin-bottom: 26px; }
+
+  .title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.1rem, 5vw, 3.1rem);
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .controls { display: flex; gap: 10px; align-items: center; }
+
+  #filter {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    padding: 9px 12px;
+    border-radius: 6px;
+    width: 210px;
+    transition: border-color .2s ease;
+  }
+  #filter::placeholder { color: var(--text-faint); }
+  #filter:focus { outline: none; border-color: var(--violet); }
+
+  button#theme-toggle {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    line-height: 1;
+    transition: border-color .2s ease, color .2s ease;
+  }
+  button#theme-toggle:hover { color: var(--text); border-color: var(--violet); }
+
+  :focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+
+  .meta {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--text-faint);
+    letter-spacing: 0.02em;
+    margin: 16px 0 5px;
+  }
+
+  .motto {
+    font-family: var(--font-sans);
+    font-style: italic;
+    font-size: 0.92rem;
+    color: var(--text-dim);
+    margin: 4px 0 10px;
+  }
+
+  .stats { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-faint); margin: 0; }
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+
+  table { width: 100%; min-width: 760px; border-collapse: collapse; table-layout: fixed; }
+
+  thead th {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-faint);
+    text-align: center;
+    padding: 14px 10px;
+    border-bottom: 2px solid var(--border-strong);
+    cursor: pointer;
+    user-select: none;
+    transition: color .2s ease, background-color .2s ease;
+  }
+  thead th:not(.domain-col) { width: calc((100% - 190px) / 5); }
+  thead th.domain-col { text-align: left; cursor: default; width: 190px; }
+  thead th:hover:not(.domain-col) { color: var(--violet); }
+  thead th.col-active { color: var(--amber); background: var(--amber-dim); }
+
+  tbody th[scope="row"] {
+    text-align: left;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 0.88rem;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    left: 0;
+    background: var(--surface);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color .2s ease;
+  }
+
+  tbody td {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    padding: 12px 10px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+    vertical-align: middle;
+    overflow-wrap: break-word;
+    transition: opacity .15s ease, color .15s ease;
+  }
+
+  tbody tr:hover { background-color: var(--surface-2); }
+  tbody tr:hover th[scope="row"] { background-color: var(--surface-2); }
+
+  tbody tr.pinned { background-color: var(--violet-dim); }
+  tbody tr.pinned th[scope="row"] {
+    background-color: var(--violet-dim);
+    box-shadow: inset 3px 0 0 var(--violet);
+  }
+
+  tr.anchor-row { background-color: var(--amber-dim); }
+  tr.anchor-row th[scope="row"] {
+    background-color: var(--amber-dim);
+    box-shadow: inset 4px 0 0 var(--amber);
+  }
+
+  .letter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5em;
+    height: 1.5em;
+    margin-right: 0.55em;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    color: var(--text-faint);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    vertical-align: middle;
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--amber);
+    border: 1px solid var(--border-strong);
+    border-radius: 3px;
+    padding: 1px 5px;
+    margin-left: 0.6em;
+    vertical-align: middle;
+  }
+
+  td.col-focused { color: var(--amber); font-weight: 500; }
+  td.col-dimmed { opacity: 0.32; }
+  th.domain-match { color: var(--amber); }
+
+  mark { background: var(--amber-dim); color: var(--amber); padding: 0 2px; border-radius: 2px; }
+
+  .hint {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-faint);
+    margin: 10px 2px 0;
+  }
+
+  .callout {
+    margin-top: 22px;
+    padding: 16px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--amber);
+    border-radius: 6px;
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .callout .eyebrow {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--amber);
+    margin-bottom: 6px;
+  }
+  .callout em { color: var(--text); font-style: normal; font-family: var(--font-mono); font-size: 0.85rem; }
+
+  footer {
+    margin-top: 30px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-faint);
+  }
+  footer a { color: var(--text-faint); text-decoration: none; border-bottom: 1px solid var(--border); transition: color .2s ease; }
+  footer a:hover { color: var(--violet); }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 32px 16px 48px; }
+    h1 { font-size: 2rem; }
+    .controls { width: 100%; }
+    #filter { flex: 1; width: auto; }
+    thead th.domain-col { width: 130px; }
+    thead th:not(.domain-col) { width: calc((100% - 130px) / 5); }
+    tbody th[scope="row"] { font-size: 0.82rem; padding: 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="title-row">
+      <h1>Pentads</h1>
+      <div class="controls">
+        <input id="filter" type="text" placeholder="Filter… ( / )" aria-label="Filter rows">
+        <button id="theme-toggle" aria-label="Switch to light theme">☾</button>
+      </div>
+    </div>
+    <p class="meta">#pentads · #year-later · #12TET · #ABCDEFGHIJKL</p>
+    <p class="motto">Twelve tunings, one five-note chord — no key outranks another.</p>
+    <p class="stats" id="stats">12 domains · 5 positions · 60 terms</p>
+  </header>
+
+  <div class="table-wrap">
+    <table id="grid" aria-label="Pentadic domain grid, 12 domains by 5 positions">
+      <thead>
+        <tr>
+          <th class="domain-col" scope="col">Domain</th>
+          <th scope="col" data-col="1" tabindex="0" role="button">I</th>
+          <th scope="col" data-col="2" tabindex="0" role="button">II</th>
+          <th scope="col" data-col="3" tabindex="0" role="button">III</th>
+          <th scope="col" data-col="4" tabindex="0" role="button">IV</th>
+          <th scope="col" data-col="5" tabindex="0" role="button">V</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-domain="Anatomy">
+          <th scope="row" tabindex="0" role="button"><span class="letter">A</span>Anatomy</th>
+          <td data-col="1">Senses</td>
+          <td data-col="2">Thalamus / Basal Ganglia</td>
+          <td data-col="3">Hippocampus</td>
+          <td data-col="4">PFC</td>
+          <td data-col="5">Motor Cortex</td>
+        </tr>
+        <tr data-domain="Bantu" class="anchor-row">
+          <th scope="row" tabindex="0" role="button"><span class="letter">B</span>Bantu<span class="tag">tonic</span></th>
+          <td data-col="1">Okubonabona</td>
+          <td data-col="2">Kubona</td>
+          <td data-col="3">Ivyabona</td>
+          <td data-col="4">Ukubona</td>
+          <td data-col="5">Sawubona</td>
+        </tr>
+        <tr data-domain="Computation">
+          <th scope="row" tabindex="0" role="button"><span class="letter">C</span>Computation</th>
+          <td data-col="1">Global</td>
+          <td data-col="2">Reflex</td>
+          <td data-col="3">Heuristic</td>
+          <td data-col="4">Local</td>
+          <td data-col="5">Regional</td>
+        </tr>
+        <tr data-domain="Data">
+          <th scope="row" tabindex="0" role="button"><span class="letter">D</span>Data</th>
+          <td data-col="1">Tensor</td>
+          <td data-col="2">Matrix</td>
+          <td data-col="3">Vector</td>
+          <td data-col="4">Eigenmode</td>
+          <td data-col="5">Scalar</td>
+        </tr>
+        <tr data-domain="Economics">
+          <th scope="row" tabindex="0" role="button"><span class="letter">E</span>Economics</th>
+          <td data-col="1">Ledger</td>
+          <td data-col="2">FastAPI</td>
+          <td data-col="3">Gradient</td>
+          <td data-col="4">SlowAPI</td>
+          <td data-col="5">Decision</td>
+        </tr>
+        <tr data-domain="Fractal">
+          <th scope="row" tabindex="0" role="button"><span class="letter">F</span>Fractal</th>
+          <td data-col="1">Body</td>
+          <td data-col="2">Mind</td>
+          <td data-col="3">Soul</td>
+          <td data-col="4">Vision</td>
+          <td data-col="5">Engineering</td>
+        </tr>
+        <tr data-domain="Gravitas">
+          <th scope="row" tabindex="0" role="button"><span class="letter">G</span>Gravitas</th>
+          <td data-col="1">Ontology</td>
+          <td data-col="2">Epistemology</td>
+          <td data-col="3">ResonanceMax</td>
+          <td data-col="4">SoftMax</td>
+          <td data-col="5">ArgMax</td>
+        </tr>
+        <tr data-domain="Household">
+          <th scope="row" tabindex="0" role="button"><span class="letter">H</span>Household</th>
+          <td data-col="1">Sensation</td>
+          <td data-col="2">Attention</td>
+          <td data-col="3">Intention</td>
+          <td data-col="4">Reaction</td>
+          <td data-col="5">Action</td>
+        </tr>
+        <tr data-domain="Iatrogenic">
+          <th scope="row" tabindex="0" role="button"><span class="letter">I</span>Iatrogenic</th>
+          <td data-col="1">Nonself</td>
+          <td data-col="2">Visceral</td>
+          <td data-col="3">Structural</td>
+          <td data-col="4">Functional</td>
+          <td data-col="5">Self</td>
+        </tr>
+        <tr data-domain="Jacobian">
+          <th scope="row" tabindex="0" role="button"><span class="letter">J</span>Jacobian</th>
+          <td data-col="1">Kapital</td>
+          <td data-col="2">Labor</td>
+          <td data-col="3">Commodities</td>
+          <td data-col="4">Services</td>
+          <td data-col="5">Information</td>
+        </tr>
+        <tr data-domain="Kantian">
+          <th scope="row" tabindex="0" role="button"><span class="letter">K</span>Kantian</th>
+          <td data-col="1">Dionysian</td>
+          <td data-col="2">Apollonian</td>
+          <td data-col="3">Tragicomic</td>
+          <td data-col="4">Eternal Recurrence</td>
+          <td data-col="5">Will-to-Power</td>
+        </tr>
+        <tr data-domain="Ludwig">
+          <th scope="row" tabindex="0" role="button"><span class="letter">L</span>Ludwig</th>
+          <td data-col="1">Hz</td>
+          <td data-col="2">12TET</td>
+          <td data-col="3">Rootless Dom7♭5</td>
+          <td data-col="4">Half-Step “Descent”</td>
+          <td data-col="5">Cadence</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="hint">Click a domain to pin a row · click a numeral to focus a column · press / to search</p>
+
+  <div class="callout">
+    <span class="eyebrow">Anchor</span>
+    Bantu is five words already owned natively — fastest into any other row. <em>Okubonabona</em> cues Senses / Global / Tensor / Ledger / Body / Ontology / Sensation / Nonself / Kapital / Dionysian / Hz at once, if that's the retrieval direction.
+  </div>
+
+  <footer>
+    <span>Kampala</span>
+    <a href="https://ukubona-llc.github.io/michelangelos-finger/" target="_blank" rel="noopener">michelangelos-finger ↗</a>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var themeBtn = document.getElementById('theme-toggle');
+  var filterInput = document.getElementById('filter');
+  var table = document.getElementById('grid');
+  var tbody = table.querySelector('tbody');
+  var rows = Array.prototype.slice.call(tbody.querySelectorAll('tr'));
+  var headerCells = Array.prototype.slice.call(table.querySelectorAll('thead th[data-col]'));
+  var stats = document.getElementById('stats');
+  var totalDomains = rows.length;
+  var colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
+
+  rows.forEach(function (row) {
+    Array.prototype.slice.call(row.querySelectorAll('td[data-col]')).forEach(function (cell) {
+      cell.dataset.original = cell.textContent;
+    });
+  });
+
+  // Theme toggle
+  themeBtn.addEventListener('click', function () {
+    var current = root.getAttribute('data-theme');
+    var next = current === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    themeBtn.textContent = next === 'dark' ? '☾' : '☀';
+    themeBtn.setAttribute('aria-label', next === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+    if (colorSchemeMeta) colorSchemeMeta.setAttribute('content', next === 'dark' ? 'dark light' : 'light dark');
+  });
+
+  // Filter
+  function escapeRegExp(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+  function applyFilter() {
+    var q = filterInput.value.trim().toLowerCase();
+    var shown = 0;
+    rows.forEach(function (row) {
+      var domainName = row.dataset.domain.toLowerCase();
+      var domainTh = row.querySelector('th[scope="row"]');
+      var cells = Array.prototype.slice.call(row.querySelectorAll('td[data-col]'));
+      var domainMatch = q !== '' && domainName.indexOf(q) !== -1;
+      var anyCellMatch = false;
+
+      cells.forEach(function (cell) {
+        var original = cell.dataset.original;
+        var matches = q !== '' && original.toLowerCase().indexOf(q) !== -1;
+        if (matches) anyCellMatch = true;
+        if (q === '') {
+          cell.textContent = original;
+        } else if (matches) {
+          var re = new RegExp('(' + escapeRegExp(q) + ')', 'ig');
+          cell.innerHTML = original.replace(re, '<mark>$1</mark>');
+        } else {
+          cell.textContent = original;
+        }
+      });
+
+      domainTh.classList.toggle('domain-match', domainMatch);
+      var rowMatches = q === '' ? true : (domainMatch || anyCellMatch);
+      row.style.display = rowMatches ? '' : 'none';
+      if (rowMatches) shown++;
+    });
+
+    stats.textContent = q === ''
+      ? (totalDomains + ' domains · 5 positions · ' + (totalDomains * 5) + ' terms')
+      : (shown + ' / ' + totalDomains + (shown === 1 ? ' domain matches' : ' domains match'));
+  }
+  filterInput.addEventListener('input', applyFilter);
+
+  // Column focus
+  var focusedCol = null;
+  function updateColumnFocus() {
+    headerCells.forEach(function (th) {
+      th.classList.toggle('col-active', th.dataset.col === focusedCol);
+    });
+    Array.prototype.slice.call(table.querySelectorAll('tbody td[data-col]')).forEach(function (td) {
+      if (focusedCol === null) {
+        td.classList.remove('col-focused', 'col-dimmed');
+      } else if (td.dataset.col === focusedCol) {
+        td.classList.add('col-focused');
+        td.classList.remove('col-dimmed');
+      } else {
+        td.classList.add('col-dimmed');
+        td.classList.remove('col-focused');
+      }
+    });
+  }
+  function toggleColumnFocus(col) {
+    focusedCol = (focusedCol === col) ? null : col;
+    updateColumnFocus();
+  }
+  headerCells.forEach(function (th) {
+    th.addEventListener('click', function () { toggleColumnFocus(th.dataset.col); });
+    th.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleColumnFocus(th.dataset.col);
+      }
+    });
+  });
+
+  // Row pin
+  rows.forEach(function (row) {
+    var label = row.querySelector('th[scope="row"]');
+    label.addEventListener('click', function () { row.classList.toggle('pinned'); });
+    label.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        row.classList.toggle('pinned');
+      }
+    });
+  });
+
+  // Keyboard: / to search, Esc to clear
+  document.addEventListener('keydown', function (e) {
+    if (e.key === '/' && document.activeElement !== filterInput) {
+      e.preventDefault();
+      filterInput.focus();
+    }
+    if (e.key === 'Escape' && document.activeElement === filterInput) {
+      filterInput.value = '';
+      applyFilter();
+      filterInput.blur();
+    }
+  });
+})();
+</script>
+</body>
+</html>
