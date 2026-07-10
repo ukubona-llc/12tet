@@ -201,6 +201,18 @@
     overflow-wrap: break-word;
     transition: opacity .15s ease, color .15s ease;
   }
+  td.cell-link {
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: var(--text-faint);
+    text-underline-offset: 4px;
+  }
+  td.cell-link:hover {
+    color: var(--amber);
+    text-decoration-color: var(--amber);
+    text-decoration-style: solid;
+  }
   tbody tr:hover { background-color: var(--surface-2); }
   tbody tr:hover th[scope="row"] { background-color: var(--surface-2); }
   tbody tr.pinned { background-color: var(--violet-dim); }
@@ -493,7 +505,7 @@
             <th scope="row" tabindex="0" role="button"><span class="letter">K</span>Kantian</th>
             <td data-col="1">Dionysian</td>
             <td data-col="2">Apollonian</td>
-            <td data-col="3">Tragicomic</td>
+            <td data-col="3" class="cell-link" data-href="https://ukb-dt.github.io/attempt-at-self-criticism/" title="An Attempt at Self-Criticism">Tragicomic</td>
             <td data-col="4">Eternal Recurrence</td>
             <td data-col="5">Will-to-Power</td>
           </tr>
@@ -1040,6 +1052,14 @@ That is almost a perfect musical analogue for your append-only ledger.</div>
     });
   });
 
+  // Cell Links Handling
+  Array.prototype.slice.call(table.querySelectorAll('td.cell-link')).forEach(function(cell) {
+    cell.addEventListener('click', function(e) {
+      e.stopPropagation(); // Prevents grid-focus events from consuming the click
+      window.open(this.dataset.href, '_blank', 'noopener,noreferrer');
+    });
+  });
+  
   // Theme toggle
   themeBtn.addEventListener('click', function () {
     var current = root.getAttribute('data-theme');
