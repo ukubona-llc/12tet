@@ -26,6 +26,8 @@
     --violet-dim: rgba(164,142,240,0.14);
     --border: rgba(164,142,240,0.16);
     --border-strong: rgba(226,163,63,0.4);
+    --danger: #d9695f;
+    --danger-dim: rgba(217,105,95,0.13);
     --font-display: 'DM Serif Display', Georgia, serif;
     --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-mono: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;
@@ -44,6 +46,8 @@
     --violet-dim: rgba(109,84,201,0.09);
     --border: rgba(109,84,201,0.16);
     --border-strong: rgba(160,106,26,0.35);
+    --danger: #b8453a;
+    --danger-dim: rgba(184,69,58,0.08);
   }
 
   * { box-sizing: border-box; }
@@ -372,11 +376,193 @@
   footer a { color: var(--text-faint); text-decoration: none; border-bottom: 1px solid var(--border); transition: color .2s ease; }
   footer a:hover { color: var(--violet); }
 
-  /* New Styles for UNDP Context Tab */
-  .session-content { max-width: 800px; color: var(--text-dim); }
-  .session-content h2 { font-family: var(--font-display); font-weight: 400; font-size: 2rem; color: var(--text); margin-bottom: 0.5rem; }
-  .session-content h3 { color: var(--amber); margin-top: 2rem; }
-  .log-box { background: var(--surface-2); border: 1px solid var(--border); padding: 16px; font-family: var(--font-mono); font-size: 0.8rem; margin-top: 2rem; }
+  /* UNDP Context Tab */
+  .undp-doc { max-width: 780px; margin: 0 auto; }
+
+  .undp-head { margin-bottom: 30px; }
+  .undp-head-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .undp-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-faint);
+  }
+  .undp-deadline {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--amber);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border: 1px solid var(--border-strong);
+    background: var(--amber-dim);
+    padding: 5px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .undp-deadline-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--amber);
+    display: inline-block;
+    animation: pulse-dot 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+  .undp-doc h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.7rem, 4vw, 2.15rem);
+    margin: 0 0 5px;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .undp-sub {
+    font-family: var(--font-sans);
+    font-style: italic;
+    color: var(--text-dim);
+    margin: 0 0 16px;
+    font-size: 0.98rem;
+  }
+  .undp-meta-row {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .undp-doc-link {
+    color: var(--violet);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1px;
+    transition: color .2s ease, border-color .2s ease;
+  }
+  .undp-doc-link:hover { color: var(--amber); border-color: var(--border-strong); }
+  .undp-ref { color: var(--text-faint); }
+
+  .undp-challenge {
+    margin: 0 0 34px;
+    padding: 22px 26px;
+    border-left: 3px solid var(--violet);
+    background: var(--violet-dim);
+    border-radius: 0 8px 8px 0;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    line-height: 1.48;
+    color: var(--text);
+  }
+
+  .undp-section-title {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-faint);
+    margin: 0 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .undp-section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .undp-pentad-cards {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  .undp-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 14px;
+    transition: border-color .2s ease, transform .2s ease;
+  }
+  .undp-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+  .undp-card-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--amber);
+    border: 1px solid var(--border-strong);
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  .undp-card-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+    margin-bottom: 8px;
+  }
+  .undp-card p { margin: 0; font-size: 0.81rem; line-height: 1.45; color: var(--text-dim); }
+  .undp-card p strong { color: var(--text); font-family: var(--font-sans); }
+
+  .undp-cities { margin-bottom: 30px; }
+  .undp-cities-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-faint);
+    margin-bottom: 10px;
+  }
+  .undp-city-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .undp-city-tags span {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+  .undp-city-tags span.kampala {
+    color: var(--amber);
+    border-color: var(--border-strong);
+    background: var(--amber-dim);
+  }
+
+  .undp-warning {
+    display: flex;
+    gap: 14px;
+    padding: 16px 18px;
+    background: var(--danger-dim);
+    border: 1px solid var(--danger);
+    border-radius: 8px;
+    margin-bottom: 26px;
+  }
+  .undp-warning-icon { font-size: 1.1rem; color: var(--danger); line-height: 1.3; }
+  .undp-warning strong {
+    color: var(--danger);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    display: block;
+    margin-bottom: 5px;
+  }
+  .undp-warning p { margin: 0; font-size: 0.86rem; color: var(--text-dim); line-height: 1.5; }
 
   @media (max-width: 640px) {
     .wrap { padding: 32px 16px 48px; }
@@ -387,6 +573,9 @@
     thead th:not(.domain-col) { width: calc((100% - 130px) / 5); }
     tbody th[scope="row"] { font-size: 0.82rem; padding: 10px; }
     .zinger-card p { font-size: 1.15rem; }
+
+    .undp-pentad-cards { grid-template-columns: repeat(2, 1fr); }
+    .undp-challenge { font-size: 1.1rem; padding: 18px 20px; }
   }
 </style>
 </head>
@@ -1024,36 +1213,77 @@ That is almost a perfect musical analogue for your append-only ledger.</div>
   </div>
 
 <div id="pane-context" class="tab-pane">
-    <div class="transcript-wrap" style="max-width: 820px;">
+    <div class="undp-doc">
       <div class="block-label">Provenance Record — UNDP Innovation Challenge</div>
-      
-      <div class="ai-msg" style="padding: 18px 22px; margin-bottom: 20px;">
-        <h3 style="margin-top: 0;">UNDP Uganda Innovation Challenge</h3>
-        <p><strong>Official Document:</strong> 
-          <a href="https://www.undp.org/sites/g/files/zskgke326/files/2026-05/call_for_ic-mo_v2_updated.pdf" target="_blank" style="color:var(--amber);">call_for_ic-mo_v2_updated.pdf</a><br>
-          <strong>Ref:</strong> UNDP-UGA-CE-LVG-2026-01 &nbsp;&nbsp; | &nbsp;&nbsp; 
-          <strong>Deadline:</strong> 31 July 2026, 5:00 PM EAT
-        </p>
 
-        <h3>The Challenge</h3>
-        <p>How might we drastically reduce municipal waste openly dumped or burned, while unlocking economic opportunities for women, youth and marginalised communities in Ugandan cities?</p>
-
-        <h3>Pentadic Mapping</h3>
-        <ul style="padding-left: 18px; line-height: 1.55;">
-          <li><strong>I (Tensor / Open Dumping):</strong> Raw waste crisis — 70% projected increase by 2050, widespread open dumping & burning.</li>
-          <li><strong>II (7 Pilot Cities):</strong> Jinja, Mbale, Gulu, Arua, Hoima, Mbarara, Kampala.</li>
-          <li><strong>III (Women & Youth):</strong> Economic opportunities for women, youth & marginalised groups.</li>
-          <li><strong>IV (Scalability + GESI):</strong> Scalable solutions with strong gender & social inclusion.</li>
-          <li><strong>V (Circular Economy):</strong> Measurable reduction in waste + sustained livelihoods.</li>
-        </ul>
-
-        <h3>IP Warning</h3>
-        <p>All intellectual property vests in UNDP upon submission. Major asymmetry.</p>
-
-        <div class="log-box" style="margin-top: 18px; font-size: 0.82rem;">
-          <span>[SYSTEM LOG]</span> Same TMVES architecture — just scaled to the municipal patient.
+      <div class="undp-head">
+        <div class="undp-head-top">
+          <span class="undp-kicker">Official Document</span>
+          <span class="undp-deadline"><span class="undp-deadline-dot"></span>31 Jul 2026 · 5:00 PM EAT</span>
+        </div>
+        <h2>UNDP Uganda Innovation Challenge</h2>
+        <p class="undp-sub">Circular Economy for Municipal Solid Waste</p>
+        <div class="undp-meta-row">
+          <a class="undp-doc-link" href="https://www.undp.org/sites/g/files/zskgke326/files/2026-05/call_for_ic-mo_v2_updated.pdf" target="_blank" rel="noopener">↗ call_for_ic-mo_v2_updated.pdf</a>
+          <span class="undp-ref">Ref UNDP-UGA-CE-LVG-2026-01</span>
         </div>
       </div>
+
+      <blockquote class="undp-challenge">
+        How might we drastically reduce municipal waste openly dumped or burned, while unlocking economic opportunities for women, youth and marginalised communities in Ugandan cities?
+      </blockquote>
+
+      <h3 class="undp-section-title">Pentadic Mapping</h3>
+      <div class="undp-pentad-cards">
+        <div class="undp-card">
+          <span class="undp-card-num">I</span>
+          <span class="undp-card-label">Tensor</span>
+          <p><strong>Open Dumping.</strong> 70% projected waste increase by 2050; widespread open dumping &amp; burning.</p>
+        </div>
+        <div class="undp-card">
+          <span class="undp-card-num">II</span>
+          <span class="undp-card-label">Reflex</span>
+          <p><strong>7 Pilot Cities.</strong> First responders across the municipal network.</p>
+        </div>
+        <div class="undp-card">
+          <span class="undp-card-num">III</span>
+          <span class="undp-card-label">Heuristic</span>
+          <p><strong>Women &amp; Youth.</strong> Economic opportunity for marginalised groups.</p>
+        </div>
+        <div class="undp-card">
+          <span class="undp-card-num">IV</span>
+          <span class="undp-card-label">Deliberation</span>
+          <p><strong>Scalability + GESI.</strong> Scalable, gender- and socially-inclusive design.</p>
+        </div>
+        <div class="undp-card">
+          <span class="undp-card-num">V</span>
+          <span class="undp-card-label">Decision</span>
+          <p><strong>Circular Economy.</strong> Measurable waste reduction, sustained livelihoods.</p>
+        </div>
+      </div>
+
+      <div class="undp-cities">
+        <span class="undp-cities-label">Pilot Cities</span>
+        <div class="undp-city-tags">
+          <span>Jinja</span>
+          <span>Mbale</span>
+          <span>Gulu</span>
+          <span>Arua</span>
+          <span>Hoima</span>
+          <span>Mbarara</span>
+          <span class="kampala">Kampala</span>
+        </div>
+      </div>
+
+      <div class="undp-warning">
+        <span class="undp-warning-icon">⚠</span>
+        <div>
+          <strong>IP Notice</strong>
+          <p>All intellectual property vests in UNDP upon submission — a major asymmetry to weigh before entry.</p>
+        </div>
+      </div>
+
+      <div class="log-box"><span>[SYSTEM LOG]</span> Same TMVES architecture — just scaled to the municipal patient.</div>
     </div>
   </div>
 
