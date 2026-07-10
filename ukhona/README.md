@@ -1,3 +1,13 @@
+Let's add "N":
+
+```
+I. Birth of Tragedy / Untimely Meditations
+II. Human, All-Too-Human / Dawn / Gaya Scienza
+III. Zarathustra
+IV. Beyond Good & Evil
+V. Genealogy / Twilight / Ecce Homo
+```
+
 We used the instructinos below to add a hyperlink to `Kantian x III`. Follow this script for further hyperlinks. But there must be a more officient `CLI automation` approach e.g.:
 
 ```sh
