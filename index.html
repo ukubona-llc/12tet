@@ -356,6 +356,9 @@
     display: block;
   }
 
+  .log-box { background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; padding: 16px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-faint); line-height: 1.5; margin-top: 2rem; }
+  .log-box span { color: var(--amber); }
+
   footer {
     margin-top: 40px;
     padding-top: 16px;
@@ -368,6 +371,12 @@
   }
   footer a { color: var(--text-faint); text-decoration: none; border-bottom: 1px solid var(--border); transition: color .2s ease; }
   footer a:hover { color: var(--violet); }
+
+  /* New Styles for UNDP Context Tab */
+  .session-content { max-width: 800px; color: var(--text-dim); }
+  .session-content h2 { font-family: var(--font-display); font-weight: 400; font-size: 2rem; color: var(--text); margin-bottom: 0.5rem; }
+  .session-content h3 { color: var(--amber); margin-top: 2rem; }
+  .log-box { background: var(--surface-2); border: 1px solid var(--border); padding: 16px; font-family: var(--font-mono); font-size: 0.8rem; margin-top: 2rem; }
 
   @media (max-width: 640px) {
     .wrap { padding: 32px 16px 48px; }
@@ -392,8 +401,8 @@
         <button id="theme-toggle" aria-label="Switch to light theme">☾</button>
       </div>
     </div>
-    <p class="meta">#pentads · #year-later · #12TET · #ABCDEFGHIJKL</p>
-    <p class="motto">Twelve tunings, one five-note chord — no key outranks another.</p>
+    <p class="meta">#pentads · #year-later · #13TET · #ABCDEFGHIJKLM</p>
+    <p class="motto">Thirteen tunings, one five-note chord — no key outranks another.</p>
   </header>
 
   <nav class="tabs" aria-label="System Components">
@@ -401,15 +410,15 @@
     <button class="tab-btn" data-target="pane-grok">Grok Footnotes</button>
     <button class="tab-btn" data-target="pane-streams">Event Streams</button>
     <button class="tab-btn" data-target="pane-zingers">The Real Zingers</button>
+    <button class="tab-btn" data-target="pane-context">UNDP Context</button>
   </nav>
 
-  <!-- TAB 1: THE GRID -->
   <div id="pane-grid" class="tab-pane active">
     <div class="grid-header-stats">
-      <p class="stats" id="stats">12 domains · 5 positions · 60 terms</p>
+      <p class="stats" id="stats">13 domains · 5 positions · 65 terms</p>
     </div>
     <div class="table-wrap">
-      <table id="grid" aria-label="Pentadic domain grid, 12 domains by 5 positions">
+      <table id="grid" aria-label="Pentadic domain grid, 13 domains by 5 positions">
         <thead>
           <tr>
             <th class="domain-col" scope="col">Domain</th>
@@ -517,6 +526,14 @@
             <td data-col="4">Half-Step “Descent”</td>
             <td data-col="5">Cadence</td>
           </tr>
+          <tr data-domain="Municipal">
+            <th scope="row" tabindex="0" role="button"><span class="letter">M</span>Municipal<span class="tag">UNDP</span></th>
+            <td data-col="1">Open Dumping</td>
+            <td data-col="2">7 Pilot Cities</td>
+            <td data-col="3">Women & Youth</td>
+            <td data-col="4">Scalability</td>
+            <td data-col="5">Circular Economy</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -527,7 +544,6 @@
     </div>
   </div>
 
-  <!-- TAB 2: GROK FOOTNOTES -->
   <div id="pane-grok" class="tab-pane">
     <div class="transcript-wrap">
       <div class="block-label">Provenance Record — Context Tuning</div>
@@ -601,7 +617,6 @@ We can also voice this out explicitly if you want sample chord spellings or voic
     </div>
   </div>
 
-  <!-- TAB 3: EVENT STREAMS -->
   <div id="pane-streams" class="tab-pane">
     <div class="transcript-wrap">
       <div class="block-label">Provenance Record — Architecture Collapse Execution</div>
@@ -932,7 +947,6 @@ That is almost a perfect musical analogue for your append-only ledger.</div>
     </div>
   </div>
 
-  <!-- TAB 4: THE REAL ZINGERS -->
   <div id="pane-zingers" class="tab-pane">
     <div class="zinger-grid">
       
@@ -1006,6 +1020,32 @@ That is almost a perfect musical analogue for your append-only ledger.</div>
         <span class="tagline">The V→I Append Operation</span>
       </div>
 
+    </div>
+  </div>
+
+  <div id="pane-context" class="tab-pane">
+    <div class="transcript-wrap">
+      <div class="block-label">Provenance Record — Clinical Architecture to Municipal Geodesics</div>
+      
+      <div class="ai-msg">
+        <h3>The Epistemological Translation</h3>
+        [cite_start]<p>In May 2026, the UNDP launched an Innovation Challenge (UNDP-UGA-CE-LVG-2026-01) [cite: 1] [cite_start]to tackle the 70% projected increase in waste generation across Ugandan cities[cite: 4]. The framework developed to solve this is not a traditional sanitation plan; it is a <strong>civilizational digital twin</strong> governed by the TMVES architecture.</p>
+        
+        <ul>
+          <li><strong>Position I (Tensor / Nonself):</strong> The raw, uncompressed pathogen. [cite_start]In the municipal realm, it is the raw landscape of <em>Open Dumping & Burning</em> across cities like Kampala, Jinja, and Mbale[cite: 14].</li>
+          <li><strong>Position II (Matrix / Input):</strong> Measurement and epistemology. [cite_start]We constrain the search space to the <em>7 Pilot Municipalities</em>[cite: 14].</li>
+          <li><strong>Position III (Vector / Throughput):</strong> The Gradient. [cite_start]The UNDP requirement to drastically reduce waste while unlocking economic opportunities for women, youth, and marginalized communities [cite: 12] maps perfectly to the throughput engine.</li>
+          <li><strong>Position IV (Eigenmode / Regulation):</strong> The boundary condition. [cite_start]The UNDP demands <em>Scalability</em> across other municipalities [cite: 17] [cite_start]and explicit integration of gender equality and social inclusion[cite: 18].</li>
+          <li><strong>Position V (Scalar / Self):</strong> The final compression. [cite_start]The <em>Circular Economy</em>[cite: 7]. A single, actionable system state.</li>
+        </ul>
+
+        <h3>The IP Trap (The Reality Check)</h3>
+        [cite_start]<p>The innovation challenge offers a USD 10,000 maximum prize [cite: 39][cite_start], but dictates that all intellectual property rights in the ideas, concepts, and solutions submitted vest in UNDP upon submission[cite: 82]. [cite_start]This is designed to ensure UNDP can make the innovation widely available and prevent monopoly control[cite: 83]. Trading the foundational, sovereign architecture of the TMVES Ukubona ecosystem for a $10k bounty is a massive asymmetry.</p>
+      </div>
+      
+      <div class="log-box">
+        <span>[SYSTEM LOG]</span> "This is exactly how a clinical investigator and systems builder dismantles a municipal crisis... The disease is the uncollected waste; the diagnostic tool is the digital twin; the therapeutic intervention is the routing optimization. It is the exact same TMVES architecture, just applied to a different patient."
+      </div>
     </div>
   </div>
 
