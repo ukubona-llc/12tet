@@ -212,14 +212,14 @@
     border-bottom: 3px double var(--amber);
   }
 
-  td.cell-link {
+  .cell-link {
     cursor: pointer;
     text-decoration: underline;
     text-decoration-style: dotted;
     text-decoration-color: var(--text-faint);
     text-underline-offset: 4px;
   }
-  td.cell-link:hover {
+  .cell-link:hover {
     color: var(--amber);
     text-decoration-color: var(--amber);
     text-decoration-style: solid;
@@ -698,7 +698,7 @@
           <tr data-domain="Iatrogenic">
             <th scope="row" tabindex="0" role="button"><span class="letter">I</span>Iatrogenic</th>
             <td data-col="1">Nonself</td>
-            <td data-col="2" class="cell-link" data-href="https://ukubona-llc.github.io/spain/" title="Ballistic vs. Diffusion">Visceral <span class="tag">Newtonian Epistemic</span></td>
+            <td data-col="2"><span class="tag">Newtonian</span> <span class="cell-link" data-href="https://ukubona-llc.github.io/spain/" title="Ballistic vs. Diffusion">Visceral</span> <span class="tag">Epistemic</span></td>
             <td data-col="3"><span class="tag">Ballistic </span>Structural<span class="tag">o)-(o</span></td>
             <td data-col="4"><span class="tag">Diffusion </span>Functional<span class="tag">[=====]</span></td>
             <td data-col="5">Self</td>
@@ -1726,8 +1726,8 @@ That makes <em>Zarathustra</em> the ultimate III column resident. It is the Heur
     });
   });
 
-  // Cell Links Handling
-  Array.prototype.slice.call(table.querySelectorAll('td.cell-link')).forEach(function(cell) {
+  // Cell Links Handling (works for both td-level and span-level .cell-link elements)
+  Array.prototype.slice.call(table.querySelectorAll('.cell-link')).forEach(function(cell) {
     cell.addEventListener('click', function(e) {
       e.stopPropagation(); // Prevents grid-focus events from consuming the click
       window.open(this.dataset.href, '_blank', 'noopener,noreferrer');
